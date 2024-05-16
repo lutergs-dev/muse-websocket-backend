@@ -15,6 +15,9 @@ spring:
       group-id: ${custom.kafka.client-id}
       key-deserializer: dev.lutergs.muse.websocket.infra.repository.kafka.serialization.NowPlayingDeserializer
       value-deserializer: dev.lutergs.muse.websocket.infra.repository.kafka.serialization.ProduceValueDtoDeserializer
+    properties:
+      sasl.mechanism: PLAIN
+      security.protocol: SASL_SSL
 
 
 
