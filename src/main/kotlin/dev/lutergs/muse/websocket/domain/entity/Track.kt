@@ -1,4 +1,4 @@
-package dev.lutergs.musewebsocketbackend.domain.entity
+package dev.lutergs.muse.websocket.domain.entity
 
 data class Track (
   val vendor: MusicVendor,

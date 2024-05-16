@@ -1,0 +1,26 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    properties:
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username='${KAFKA_API_KEY}' password='${KAFKA_API_SECRET}';
+      sasl.mechanism: PLAIN
+      security.protocol: SASL_SSL
+
+  data:
+    redis:
+      sentinel:
+        master: ${REDIS_SENTINEL_MASTER_NAME}
+        nodes: ${REDIS_SENTINEL_NODES}
+
+custom:
+  web:
+    hostname: ${KUBERNETES_HOSTNAME}
+  main:
+    server-url: ${MAIN_SERVER_URL}
+  kafka:
+    client-id: ${KAFKA_CLIENT_ID}
+    proxy:
+      url: ${KAFKA_PROXY_URL}
+      cluster-id: ${KAFKA_CLUSTER_ID}
+      api-key: ${KAFKA_API_KEY}
+      api-secret: ${KAFKA_API_SECRET}

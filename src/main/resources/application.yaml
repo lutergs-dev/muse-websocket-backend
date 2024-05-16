@@ -1,1 +1,20 @@
-spring.application.name=muse-websocket-backend
+spring:
+  application:
+    name: muse-websocket-backend
+
+  kafka:
+    producer:
+      client-id: ${custom.kafka.client-id}
+      acks: all
+    listener:
+      ack-mode: batch
+      async-acks: false
+      concurrency: 3
+      type: batch
+    consumer:
+      group-id: ${custom.kafka.client-id}
+      key-deserializer: dev.lutergs.muse.websocket.infra.repository.kafka.serialization.NowPlayingDeserializer
+      value-deserializer: dev.lutergs.muse.websocket.infra.repository.kafka.serialization.ProduceValueDtoDeserializer
+
+
+

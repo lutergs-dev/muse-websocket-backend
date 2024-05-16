@@ -1,4 +1,4 @@
-package dev.lutergs.musewebsocketbackend
+package dev.lutergs.muse.websocket
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
