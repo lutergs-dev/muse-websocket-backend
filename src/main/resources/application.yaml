@@ -19,5 +19,9 @@ spring:
       sasl.mechanism: PLAIN
       security.protocol: SASL_SSL
 
+  threads:
+    virtual:
+      enabled: true
+
 
 

@@ -3,6 +3,8 @@ spring:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     properties:
       sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username='${KAFKA_API_KEY}' password='${KAFKA_API_SECRET}';
+      ssl.truststore.location: ${KAFKA_TRUSTSTORE_PATH}
+      ssl.truststore.password: ${KAFKA_TRUSTSTORE_PASSWORD}
 
   data:
     redis:
@@ -17,8 +19,4 @@ custom:
     server-url: ${MAIN_SERVER_URL}
   kafka:
     client-id: ${KAFKA_CLIENT_ID}
-    proxy:
-      url: ${KAFKA_PROXY_URL}
-      cluster-id: ${KAFKA_CLUSTER_ID}
-      api-key: ${KAFKA_API_KEY}
-      api-secret: ${KAFKA_API_SECRET}
+    cluster-type: self_hosted

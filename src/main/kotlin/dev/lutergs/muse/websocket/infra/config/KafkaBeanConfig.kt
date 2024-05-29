@@ -1,26 +1,34 @@
 package dev.lutergs.muse.websocket.infra.config
 
-import dev.lutergs.muse.websocket.infra.config.properties.KafkaProxyConfigProperties
+import dev.lutergs.muse.websocket.infra.config.properties.CustomKafkaConfigProperties
 import dev.lutergs.muse.websocket.infra.config.properties.WebserverConfigProperties
 import dev.lutergs.muse.websocket.infra.controller.KafkaReceiver
-import dev.lutergs.muse.websocket.infra.repository.kafka.proxy.KafkaRestProxyClient
 import dev.lutergs.muse.websocket.service.UserService
+import org.apache.kafka.clients.admin.Admin
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.util.Properties
 
 @Configuration
 @EnableConfigurationProperties(value = [
-  KafkaProxyConfigProperties::class
+  CustomKafkaConfigProperties::class
 ])
 class KafkaBeanConfig(
-  private val kafkaProxyConfigProperties: KafkaProxyConfigProperties,
-  private val webserverConfigProperties: WebserverConfigProperties
+  private val customKafkaConfigProperties: CustomKafkaConfigProperties,
+  private val webserverConfigProperties: WebserverConfigProperties,
+  private val kafkaProperties: KafkaProperties
 ) {
-  @Bean
-  fun kafkaRestProxyClient(): KafkaRestProxyClient = KafkaRestProxyClient(
-    kafkaProxyConfigProperties = kafkaProxyConfigProperties
-  )
+
+  @Bean(name = ["admin"])
+  fun kafkaAdmin(): Admin {
+    val adminProperties = Properties().apply {
+      this["bootstrap.servers"] = kafkaProperties.bootstrapServers
+      this.putAll(kafkaProperties.properties)
+    }
+    return Admin.create(adminProperties)
+  }
 
   @Bean(name = ["kafkaTopicName"])
   fun kafkaTopicName(): String = this.webserverConfigProperties.hostname
@@ -29,10 +37,11 @@ class KafkaBeanConfig(
   fun kafkaReceiver(
     webserverConfigProperties: WebserverConfigProperties,
     userService: UserService,
-    kafkaRestProxyClient: KafkaRestProxyClient,
+    admin: Admin
   ): KafkaReceiver = KafkaReceiver(
     webserverConfigProperties = webserverConfigProperties,
     userService = userService,
-    kafkaRestProxyClient = kafkaRestProxyClient
+    kafkaAdmin = admin,
+    kafkaConfigProperties = this.customKafkaConfigProperties
   )
 }
